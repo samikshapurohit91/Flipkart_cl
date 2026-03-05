@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details</title>
+  <link rel="stylesheet" href="sam.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      padding: 20px;
+    }
+    .product-container {
+      display: flex;
+      gap: 30px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .product-container img {
+      width: 300px;
+      height: auto;
+      border-radius: 10px;
+    }
+    .product-info h2 {
+      margin-bottom: 10px;
+    }
+    .product-info p {
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Product Details</h1>
+  <div id="productDetails" class="product-container">
+    <p>Loading...</p>
+  </div>
+
+  <script>
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+
+
+    
+    //  const productId = localStorage.getItem('selectedProductId');
+
+    
+    fetch(`https://dummyjson.com/products/${productId}`)
+       .then(response => response.json())
+       .then(product => {
+        document.getElementById('productDetails').innerHTML = `
+          <img src="${product.thumbnail}" alt="${product.title}">
+          <div class="product-info">
+            <h2>${product.title}</h2>
+           <p><b>Brand:</b> ${product.brand}</p>
+             <p><b>Category:</b> ${product.category}</p>
+          <p><b>Price:</b> ₹${product.price * 85}</p>
+            <p><b>Rating:</b> ${product.rating}⭐</p>
+             <p><b>Description:</b> ${product.description}</p>
+           <button onclick="window.history.back()">Back to Home</button>
+        </div>
+       `;
+      })
+       .catch(error => {
+        document.getElementById('productDetails').innerHTML = `<p>Failed to load product.</p>`;
+        console.error(error);
+       });
+  </script>
+  <script src="script.js"></script> 
+
+</body>
+</html>
